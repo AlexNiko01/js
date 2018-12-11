@@ -34,7 +34,15 @@
     //     console.log('http');
     // }
     btn.addEventListener('click', () => {
-        location.assign('http://loftschool.com')
+
+        let p = location.search.slice(1).split('&');
+        const t = p.reduce((prev, cur) => {
+            const [name, value] = cur.split('=');
+            prev[name] = value;
+            return prev;
+        }, {});
+        console.log(t);
+
     });
 </script>
 <!--<script src="myTest2.js"></script>-->
