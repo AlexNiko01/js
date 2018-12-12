@@ -6,7 +6,7 @@ $vehicle = (($arg == 'B') ? 'bus' :
             ($arg == 'C') ? 'car' :
                 ($arg == 'H') ? 'horse' :
                     'feet');
-echo $vehicle;
+//echo $vehicle;
 
 $vehicle = (((((($arg == 'B') ? 'bus' :
     $arg == 'A') ? 'airplane' :
@@ -14,3 +14,7 @@ $vehicle = (((((($arg == 'B') ? 'bus' :
     $arg == 'C') ? 'car' :
     $arg == 'H') ? 'horse' :
     'feet');
+
+
+$a = '1a';
+echo ++$a;

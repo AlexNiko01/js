@@ -1,5 +1,5 @@
-import { assert } from 'chai';
-import { createWindow, closeWindow, createCookie, deleteCookie } from '../src/index';
+import {assert} from 'chai';
+import {createWindow, closeWindow, createCookie, deleteCookie} from '../../src/11/index';
 
 function getCookies() {
     return document.cookie
