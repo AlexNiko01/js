@@ -44,7 +44,7 @@ class Cookie {
             }
 
         }
-
+        console.log(existCookie);
         return existCookie;
 
     }
@@ -150,12 +150,12 @@ markup.createFilterField();
 markup.generateTable(heading, cookie.parseCookie());
 let form = document.getElementById('cookieForm');
 let filter = document.getElementById('filterCookie');
-let table = document.getElementById('cookieTable');
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     let data = {};
     let formData = Object.values(form);
+    let table = document.getElementById('cookieTable');
 
     formData.forEach((el) => {
         if (el.name === 'name') {
@@ -165,13 +165,19 @@ form.addEventListener('submit', (e) => {
             data.val = el.value;
         }
     });
-    if (data.name === filter.value || data.val === filter.value) {
+    console.log(1);
+    let cookieObj = cookie.parseCookie();
+
+    if (cookieObj.hasOwnProperty(data.name) && data.val !== filter.value) {
+        console.log(2);
         cookie.addCookie(data);
+
+        let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
         if (table) {
             homeworkContainer.removeChild(table);
         }
-
-        markup.generateTable(heading, '');
+        delete filteredCookie[data.name];
+        markup.generateTable(heading, filteredCookie);
     }
     cookie.addCookie(data)
 });
@@ -179,10 +185,16 @@ form.addEventListener('submit', (e) => {
 filter.addEventListener('keyup', function () {
     let cookieObj = cookie.parseCookie();
     let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
+    let table = document.getElementById('cookieTable');
 
     if (table) {
         homeworkContainer.removeChild(table);
     }
 
     markup.generateTable(heading, filteredCookie);
+});
+
+let removeButton = document.getElementsByClassName('rmCookie');
+removeButton.addEventListener('click', () => {
+
 });
