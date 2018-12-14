@@ -10,6 +10,7 @@ class Helper {
                 const [name, val] = cur.split('=');
 
                 prev[name] = val;
+
                 return prev;
 
             }, {})
@@ -44,13 +45,17 @@ class Cookie {
             }
 
         }
-        console.log(existCookie);
+
         return existCookie;
 
     }
 }
 
 let cookie = new Cookie();
+
+let form;
+let filter;
+let table;
 
 class Markup {
     createForm() {
@@ -80,14 +85,14 @@ class Markup {
 
     generateTable(hadings, cookies) {
 
-        let table = document.createElement('table');
+        let newTable = document.createElement('table');
 
-        table.setAttribute('id', 'cookieTable');
+        newTable.setAttribute('id', 'cookieTable');
         let tableHeader = document.createElement('tr');
         let title = document.createElement('caption');
 
         title.innerText = 'ALL COOKIEs';
-        table.appendChild(title);
+        newTable.appendChild(title);
 
         hadings.forEach((el) => {
             let colName = document.createElement('th');
@@ -95,19 +100,21 @@ class Markup {
             colName.innerText = el;
             tableHeader.appendChild(colName);
         });
-        table.appendChild(tableHeader);
+        newTable.appendChild(tableHeader);
 
         if (Object.getOwnPropertyNames(cookies).length !== 0) {
             for (let prop in cookies) {
                 if (!cookies.hasOwnProperty(prop) || !cookies[prop]) {
                     continue;
                 }
-                this.createTableRow(prop, cookies[prop], table);
+                this.createTableRow(prop, cookies[prop], newTable);
             }
         }
 
-        table.setAttribute('border', '1px');
-        homeworkContainer.appendChild(table);
+        newTable.setAttribute('border', '1px');
+
+        homeworkContainer.appendChild(newTable);
+        table = newTable;
     }
 
     createTableRow(prop, cookie, table) {
@@ -148,14 +155,16 @@ let markup = new Markup();
 markup.createForm();
 markup.createFilterField();
 markup.generateTable(heading, cookie.parseCookie());
-let form = document.getElementById('cookieForm');
-let filter = document.getElementById('filterCookie');
+
+form = document.getElementById('cookieForm');
+filter = document.getElementById('filterCookie');
+table = document.getElementById('cookieTable');
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     let data = {};
     let formData = Object.values(form);
-    let table = document.getElementById('cookieTable');
+    // let table = document.getElementById('cookieTable');
 
     formData.forEach((el) => {
         if (el.name === 'name') {
@@ -165,14 +174,12 @@ form.addEventListener('submit', (e) => {
             data.val = el.value;
         }
     });
-    console.log(1);
     let cookieObj = cookie.parseCookie();
 
     if (cookieObj.hasOwnProperty(data.name) && data.val !== filter.value) {
-        console.log(2);
         cookie.addCookie(data);
-
         let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
+
         if (table) {
             homeworkContainer.removeChild(table);
         }
@@ -182,19 +189,38 @@ form.addEventListener('submit', (e) => {
     cookie.addCookie(data)
 });
 
+function addEventOnRemoveButoon() {
+    let removeButtonCollection = document.getElementsByClassName('rmCookie');
+
+    for (let i = 0; i < removeButtonCollection.length; i++) {
+        removeButtonCollection[i].addEventListener('click', (e) => {
+            let value = e.target.previousSibling;
+            let name = value.previousSibling;
+            // let table = document.getElementById('cookieTable');
+            let cookieObj = cookie.parseCookie();
+            let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
+
+            if (table) {
+                homeworkContainer.removeChild(table);
+            }
+            delete filteredCookie[name.innerText];
+            markup.generateTable(heading, filteredCookie);
+            document.cookie = (name.innerText + '=' + value.innerText).toString()
+                + '; expires=' + (new Date(0)).toUTCString();
+        });
+    }
+}
+
 filter.addEventListener('keyup', function () {
     let cookieObj = cookie.parseCookie();
     let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
-    let table = document.getElementById('cookieTable');
+    // let table = document.getElementById('cookieTable');
 
     if (table) {
         homeworkContainer.removeChild(table);
     }
 
     markup.generateTable(heading, filteredCookie);
+    addEventOnRemoveButoon();
 });
-
-let removeButton = document.getElementsByClassName('rmCookie');
-removeButton.addEventListener('click', () => {
-
-});
+addEventOnRemoveButoon();
