@@ -189,14 +189,13 @@ form.addEventListener('submit', (e) => {
     cookie.addCookie(data)
 });
 
-function addEventOnRemoveButoon() {
+function addEventOnRemoveButton() {
     let removeButtonCollection = document.getElementsByClassName('rmCookie');
 
     for (let i = 0; i < removeButtonCollection.length; i++) {
         removeButtonCollection[i].addEventListener('click', (e) => {
             let value = e.target.previousSibling;
             let name = value.previousSibling;
-            // let table = document.getElementById('cookieTable');
             let cookieObj = cookie.parseCookie();
             let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
 
@@ -214,13 +213,12 @@ function addEventOnRemoveButoon() {
 filter.addEventListener('keyup', function () {
     let cookieObj = cookie.parseCookie();
     let filteredCookie = cookie.filterCookie(cookieObj, filter.value);
-    // let table = document.getElementById('cookieTable');
 
     if (table) {
         homeworkContainer.removeChild(table);
     }
 
     markup.generateTable(heading, filteredCookie);
-    addEventOnRemoveButoon();
+    addEventOnRemoveButton();
 });
-addEventOnRemoveButoon();
+addEventOnRemoveButton();
