@@ -5,11 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<button id="myBut">click</button>
+<!--<button id="myBut">click</button>-->
 <!--<div id="homeworkContainer" style="position: relative; width: 100%; min-height: 100vh; background-color: #0074D9"></div>-->
 <!--<canvas></canvas>-->
-<!--<button id="myButton">load</button>-->
-<!--<div id="content"></div>-->
+<button id="myButton">load</button>
+<div id="content"></div>
 
 <!--<div id="homework-container">-->
 <!--<div id="loading-block"></div>-->
@@ -19,7 +19,8 @@
 <!--</div>-->
 
 <script>
-    const btn = document.getElementById('myBut');
+    const btn = document.getElementById('myButton');
+    const content = document.getElementById('content');
     // btn.addEventListener('click', () => {
     //     const newWindow = window.open('', '', 'height=500, width=600, top=200');
     //     let newDiv = newWindow.document.createElement('div');
@@ -33,19 +34,54 @@
     // if(location.protocol === 'http'){
     //     console.log('http');
     // }
+    // btn.addEventListener('click', () => {
+    //
+    //     let p = location.search.slice(1).split('&');
+    //     const t = p.reduce((prev, cur) => {
+    //         const [name, value] = cur.split('=');
+    //         prev[name] = value;
+    //         return prev;
+    //     }, {});
+    //     console.log(t);
+    //
+    // });
+
+    // function loadFile(url) {
+    //     return new Promise((resolve, reject) => {
+    //         const xhr = new XMLHttpRequest();
+    //         xhr.open('GET', url);
+    //         xhr.send();
+    //         xhr.addEventListener('load', () => {
+    //             if (xhr.response === 404) {
+    //                 reject()
+    //             } else {
+    //                 resolve(xhr.response);
+    //             }
+    //         });
+    //     })
+    // }
+    function loadFile(url) {
+        return fetch(url).then(r => r.text())
+    }
+
     btn.addEventListener('click', () => {
+        loadFile('file.txt')
+            .then((value) => {
+                content.textContent = value;
+                return loadFile('file2.txt')
+            })
+            .then((value) => {
+                content.textContent += ' ' + value;
+            })
+            .catch(() => {
+                console.log('file is not exist');
+            })
+        ;
+    })
 
-        let p = location.search.slice(1).split('&');
-        const t = p.reduce((prev, cur) => {
-            const [name, value] = cur.split('=');
-            prev[name] = value;
-            return prev;
-        }, {});
-        console.log(t);
 
-    });
 </script>
 <!--<script src="myTest2.js"></script>-->
-<script src="myTest3.js"></script>
+<!--<script src="myTest3.js"></script>-->
 </body>
 </html>
