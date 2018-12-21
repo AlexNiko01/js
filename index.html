@@ -20,7 +20,7 @@
 
 <script>
     const btn = document.getElementById('myButton');
-    const content = document.getElementById('content');
+    let content = document.getElementById('content');
     // btn.addEventListener('click', () => {
     //     const newWindow = window.open('', '', 'height=500, width=600, top=200');
     //     let newDiv = newWindow.document.createElement('div');
@@ -64,24 +64,46 @@
         return fetch(url).then(r => r.text())
     }
 
-    btn.addEventListener('click', () => {
-        loadFile('file.txt')
-            .then((value) => {
-                content.textContent = value;
-                return loadFile('file2.txt')
-            })
-            .then((value) => {
-                content.textContent += ' ' + value;
-            })
-            .catch(() => {
-                console.log('file is not exist');
-            })
-        ;
-    })
+    btn.addEventListener('click', async () => {
+        const response = await fetch('file.txt');
+        if(response.status === 404){
+            console.log('chmo');
+        }else {
+            content = await response.text();
+            console.log(content);
+        }
 
+    });
+    // btn.addEventListener('click',  () => {
+    //     loadFile('file.txt')
+    //         .then((value) => {
+    //             content.textContent = value;
+    //             return loadFile('file2.txt')
+    //         })
+    //         .then((value) => {
+    //             content.textContent += ' ' + value;
+    //         })
+    //         .catch(() => {
+    //             console.log('file is not exist');
+    //         })
+    //     ;
+    // });
+
+    // fetch('file2s.txt')
+    //     .then(response => {
+    //         if (response.status === 404) {
+    //             return Promise.reject()
+    //         }
+    //         return response.text()
+    //     })
+    //     .then(val => console.log(val))
+    //     .catch((e) => {
+    //         console.log('chmo')
+    //     });
 
 </script>
 <!--<script src="myTest2.js"></script>-->
 <!--<script src="myTest3.js"></script>-->
+<!--<script src="script.js"></script>-->
 </body>
 </html>
