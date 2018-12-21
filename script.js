@@ -15,13 +15,28 @@ function auth() {
     })
 }
 
+function callAPI(method, params) {
+    return new Promise((resolve, reject) => {
+        VK.api(method, params, (data) => {
+            if (data.error) {
+                reject(data.error);
+            }
+            resolve(data.response);
+        });
+    })
+}
+
 auth()
-    .then(()=>{
-       console.log('ok');
+    .then(() => {
+        return callAPI('users.get', {
+            fields: 'photo_100',
+            version: '5.92'
+        })
+    })
+    .then((response) => {
+        console.log(response);
     });
 
-
-// VK.api('users.get',{fields:'photo_100'},(respon)=>{console.log(respon)});
 
 
 
