@@ -44,7 +44,7 @@ class SqrCalc extends Calc {
     }
 
     diff(a, b) {
-        return  super.diff(a, b) ** 2;
+        return super.diff(a, b) ** 2;
 
     }
 }
@@ -62,7 +62,8 @@ let obj = new CreateObj;
 CreateObj.prototype = obj;
 let obj3 = new obj.constructor();
 let obj4 = new CreateObj;
-console.log(obj3, obj4);
+
+// console.log(obj3, obj4);
 
 
 function CreateObj2() {
@@ -73,6 +74,61 @@ CreateObj2.prototype = {};
 let obj6 = new CreateObj2;
 let obj5 = new obj6.constructor();
 
-console.log(obj6, obj5);
+// console.log(obj6, obj5);
 // let obj2 = new CreateObj;
 // console.log(obj2);
+function Animal(name) {
+    this.name = name;
+
+}
+
+Animal.prototype.walk = function () {
+    console.log("ходит " + this.name);
+};
+
+function Rabbit(name) {
+    Animal.apply(this, arguments);
+}
+
+Rabbit.prototype = Object.create(Animal.prototype);
+
+Rabbit.prototype.walk = function () {
+    console.log("прыгает " + this.name);
+};
+
+var rabbit = new Rabbit("Кроль");
+rabbit.walk();
+
+
+function Clock(options) {
+    this.template = options.template;
+    this.timer = 0;
+    this.render = function () {
+        var date = new Date();
+
+        var hours = date.getHours();
+        if (hours < 10) hours = '0' + hours;
+
+        var min = date.getMinutes();
+        if (min < 10) min = '0' + min;
+
+        var sec = date.getSeconds();
+        if (sec < 10) sec = '0' + sec;
+
+        var output = this.template.replace('h', hours).replace('m', min).replace('s', sec);
+
+        console.log(output);
+    };
+}
+
+Clock.prototype.stop = function () {
+    clearInterval(this.timer);
+};
+Clock.prototype.start = function () {
+    this.render();
+    this.timer = setInterval(this.render, 1000);
+};
+let clock = new Clock({
+    template: 'h:m:s'
+});
+clock.start();
