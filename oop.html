@@ -17,19 +17,7 @@
     });
 
     // lowResolutionClock.start();
-    var menu = new AnimatingMenu();
 
-    menu.showState(); // закрыто
-
-    menu.open();
-    menu.showState(); // анимация
-
-    setTimeout(function () {
-        menu.showState(); // открыто
-
-        menu.close();
-        menu.showState(); // закрыто (закрытие без анимации)
-    }, 1000);
 </script>
 </body>
 </html>

@@ -143,21 +143,17 @@ function Menu(state) {
 
 Menu.STATE_OPEN = 1;
 Menu.STATE_CLOSED = 0;
-
 Menu.prototype.open = function () {
     this._state = Menu.STATE_OPEN;
 };
-
 Menu.prototype.close = function () {
     this._state = Menu.STATE_CLOSED;
 };
 
 Menu.prototype._stateAsString = function () {
-
     switch (this._state) {
         case Menu.STATE_OPEN:
             return 'открыто';
-
         case Menu.STATE_CLOSED:
             return 'закрыто';
     }
@@ -167,48 +163,44 @@ Menu.prototype.showState = function () {
     console.log(this._stateAsString());
 };
 
+
 function AnimatingMenu() {
     Menu.apply(this, arguments);
 }
 
-AnimatingMenu.prototype = Object.create(Menu);
+AnimatingMenu.prototype = Object.create(Menu.prototype);
 AnimatingMenu.STATE_ANIMATING = 2;
 
 AnimatingMenu.prototype.open = function () {
     this._state = AnimatingMenu.STATE_ANIMATING;
-    setTimeout(function () {
-        this.prototype.open()
+    this._timer = setTimeout(function () {
+        Menu.prototype.open.call(this)
     }.bind(this), 1000)
 };
 
 AnimatingMenu.prototype.close = function () {
     if (this._state === AnimatingMenu.STATE_ANIMATING) {
-        clearTimeout(function () {
-            this.prototype.open()
-        }.bind(this), 1000);
-        this.prototype.close();
+        clearTimeout(this._timer);
     }
+    Menu.prototype.close.call(this)
 };
 AnimatingMenu.prototype.showState = function () {
-    console.log(this._state);
-    switch (this._state) {
-        case AnimatingMenu.STATE_ANIMATING:
-            console.log('анимация');
-            break;
-        default:
-            this.prototype._stateAsString();
+    if (this._state === AnimatingMenu.STATE_ANIMATING) {
+        console.log('анимация');
+
+    } else {
+        Menu.prototype.showState.call(this);
     }
 };
+
 var menu = new AnimatingMenu();
-
+console.log(AnimatingMenu.prototype);
 menu.showState(); // закрыто
-
 menu.open();
 menu.showState(); // анимация
 
 setTimeout(function () {
     menu.showState(); // открыто
-
     menu.close();
     menu.showState(); // закрыто (закрытие без анимации)
 }, 1000);
