@@ -10,25 +10,26 @@
 <button id="myButton">press</button>
 <script>
 
-    // let form = new Form();
-    //
-    // setTimeout(function () {
-    //     form.name = 'hui';
-    //     form.phone = 'hui';
-    //     form.email = 'hui';
-    //     form.message = 'hui';
-    //
-    //     if(form.hasErrors()) {
-    //         console.log(form.errors);
-    //         return;
-    //     }
-    //
-    //     form.send().then(res => {
-    //         console.log(res);
-    //     });
-    //
-    // }, 2000)
 
+    var lowResolutionClock = new ExtendedClock({
+        template: 'h:m:s',
+        precision: 10000
+    });
+
+    // lowResolutionClock.start();
+    var menu = new AnimatingMenu();
+
+    menu.showState(); // закрыто
+
+    menu.open();
+    menu.showState(); // анимация
+
+    setTimeout(function () {
+        menu.showState(); // открыто
+
+        menu.close();
+        menu.showState(); // закрыто (закрытие без анимации)
+    }, 1000);
 </script>
 </body>
 </html>

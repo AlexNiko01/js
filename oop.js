@@ -49,12 +49,6 @@ class SqrCalc extends Calc {
     }
 }
 
-// const calc = new Calc();
-// console.log(calc.sum(2, 3));
-//
-// const sqrCalc = new SqrCalc();
-// console.log(sqrCalc.sum(2, 3));
-
 function CoffeeMachine(power) {
     this._power = power;
     this._waterAmount = 0;
@@ -73,27 +67,8 @@ CoffeeMachine.prototype.run = function () {
 CoffeeMachine.prototype.setWaterAmount = function (amount) {
     this._waterAmount = amount;
 };
-let obj = new CreateObj;
-CreateObj.prototype = obj;
-let obj3 = new obj.constructor();
-let obj4 = new CreateObj;
 
-// console.log(obj3, obj4);
 
-function Hamster() {
-    this.food = [];
-}
-
-Hamster.prototype.found = function (something) {
-    this.food.push(something);
-};
-CreateObj2.prototype = {};
-let obj6 = new CreateObj2;
-let obj5 = new obj6.constructor();
-
-// console.log(obj6, obj5);
-// let obj2 = new CreateObj;
-// console.log(obj2);
 function Animal(name) {
     this.name = name;
 
@@ -110,7 +85,7 @@ function Rabbit(name) {
 Rabbit.prototype = Object.create(Animal.prototype);
 
 Rabbit.prototype.walk = function () {
-    console.log("прыгает " + this.name);
+    // console.log("прыгает " + this.name);
 };
 
 var rabbit = new Rabbit("Кроль");
@@ -118,34 +93,112 @@ rabbit.walk();
 
 
 function Clock(options) {
-    this.template = options.template;
-    this.timer = 0;
-    this.render = function () {
-        var date = new Date();
-
-        var hours = date.getHours();
-        if (hours < 10) hours = '0' + hours;
-
-        var min = date.getMinutes();
-        if (min < 10) min = '0' + min;
-
-        var sec = date.getSeconds();
-        if (sec < 10) sec = '0' + sec;
-
-        var output = this.template.replace('h', hours).replace('m', min).replace('s', sec);
-
-        console.log(output);
-    };
+    this._template = options.template;
 }
 
+Clock.prototype._render = function () {
+    var date = new Date();
+    var hours = date.getHours();
+    if (hours < 10) hours = '0' + hours;
+    var min = date.getMinutes();
+    if (min < 10) min = '0' + min;
+    var sec = date.getSeconds();
+    if (sec < 10) sec = '0' + sec;
+    var output = this._template.replace('h', hours).replace('m', min).replace('s', sec);
+    console.log(output);
+};
+
 Clock.prototype.stop = function () {
-    clearInterval(this.timer);
+    clearInterval(this._timer);
 };
+
 Clock.prototype.start = function () {
-    this.render();
-    this.timer = setInterval(this.render, 1000);
+    this._render();
+    var self = this;
+    this._timer = setInterval(function () {
+        self._render();
+    }, 1000);
 };
-let clock = new Clock({
-    template: 'h:m:s'
-});
-clock.start();
+
+
+function ExtendedClock(options) {
+    Clock.apply(this, arguments);
+    this._precision = options.precision ? options.precision : 1000;
+}
+
+ExtendedClock.prototype = Object.create(Clock.prototype);
+
+ExtendedClock.prototype.start = function () {
+    this._render();
+    var self = this;
+    this._timer = setInterval(function () {
+        self._render();
+    }, this._precision);
+};
+
+
+function Menu(state) {
+    this._state = state || Menu.STATE_CLOSED;
+};
+
+Menu.STATE_OPEN = 1;
+Menu.STATE_CLOSED = 0;
+
+Menu.prototype.open = function () {
+    this._state = Menu.STATE_OPEN;
+};
+
+Menu.prototype.close = function () {
+    this._state = Menu.STATE_CLOSED;
+};
+
+Menu.prototype._stateAsString = function () {
+
+    switch (this._state) {
+        case Menu.STATE_OPEN:
+            return 'открыто';
+
+        case Menu.STATE_CLOSED:
+            return 'закрыто';
+    }
+};
+
+Menu.prototype.showState = function () {
+    alert(this._stateAsString());
+};
+
+function AnimatingMenu() {
+    Menu.apply(this, arguments);
+}
+
+AnimatingMenu.prototype = Object.create(Menu);
+AnimatingMenu.STATE_ANIMATING = 2;
+
+AnimatingMenu.prototype.open = function () {
+    this._state = AnimatingMenu.STATE_ANIMATING;
+    setTimeout(function () {
+        this.prototype.open()
+    }.bind(this), 1000)
+};
+
+AnimatingMenu.prototype.close = function () {
+    if (this._state === AnimatingMenu.STATE_ANIMATING) {
+        clearTimeout(function () {
+            this.prototype.open()
+        }.bind(this), 1000);
+        this.prototype.close();
+    }
+};
+AnimatingMenu.prototype.showState = function () {
+    console.log(this._state);
+    switch (this._state) {
+        case AnimatingMenu.STATE_ANIMATING:
+            alert('анимация');
+            break;
+        default:
+            this.prototype._stateAsString();
+    }
+}
+;
+var menu = new AnimatingMenu();
+console.dir(menu);
