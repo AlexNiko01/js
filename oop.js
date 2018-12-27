@@ -164,7 +164,7 @@ Menu.prototype._stateAsString = function () {
 };
 
 Menu.prototype.showState = function () {
-    alert(this._stateAsString());
+    console.log(this._stateAsString());
 };
 
 function AnimatingMenu() {
@@ -193,12 +193,22 @@ AnimatingMenu.prototype.showState = function () {
     console.log(this._state);
     switch (this._state) {
         case AnimatingMenu.STATE_ANIMATING:
-            alert('анимация');
+            console.log('анимация');
             break;
         default:
             this.prototype._stateAsString();
     }
-}
-;
+};
 var menu = new AnimatingMenu();
-console.dir(menu);
+
+menu.showState(); // закрыто
+
+menu.open();
+menu.showState(); // анимация
+
+setTimeout(function () {
+    menu.showState(); // открыто
+
+    menu.close();
+    menu.showState(); // закрыто (закрытие без анимации)
+}, 1000);
