@@ -55,8 +55,23 @@ class SqrCalc extends Calc {
 // const sqrCalc = new SqrCalc();
 // console.log(sqrCalc.sum(2, 3));
 
-function CreateObj() {
-    this.name = 'test';
+function CoffeeMachine(power) {
+    this._power = power;
+    this._waterAmount = 0;
+    this.WATER_HEAT_CAPACITY = 4200;
+}
+
+// CoffeeMachine.prototype.WATER_HEAT_CAPACITY = 4200;
+CoffeeMachine.prototype.getTimeToBoil = function () {
+    return this._waterAmount * this.WATER_HEAT_CAPACITY * 80 / this._power;
+};
+CoffeeMachine.prototype.run = function () {
+    setTimeout(function () {
+        // alert('Кофе готов!');
+    }, this.getTimeToBoil());
+};
+CoffeeMachine.prototype.setWaterAmount = function (amount) {
+    this._waterAmount = amount;
 };
 let obj = new CreateObj;
 CreateObj.prototype = obj;
@@ -65,10 +80,12 @@ let obj4 = new CreateObj;
 
 // console.log(obj3, obj4);
 
+function Hamster() {
+    this.food = [];
+}
 
-function CreateObj2() {
-    this.name = 'test';
-    // this.__proto__ = {};
+Hamster.prototype.found = function (something) {
+    this.food.push(something);
 };
 CreateObj2.prototype = {};
 let obj6 = new CreateObj2;
