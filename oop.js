@@ -193,14 +193,19 @@ AnimatingMenu.prototype.showState = function () {
     }
 };
 
-var menu = new AnimatingMenu();
-console.log(AnimatingMenu.prototype);
-menu.showState(); // закрыто
-menu.open();
-menu.showState(); // анимация
+// var menu = new AnimatingMenu();
+// console.log(AnimatingMenu.prototype);
+// menu.showState(); // закрыто
+// menu.open();
+// menu.showState(); // анимация
+//
+// setTimeout(function () {
+//     menu.showState(); // открыто
+//     menu.close();
+//     menu.showState(); // закрыто (закрытие без анимации)
+// }, 1000);
 
-setTimeout(function () {
-    menu.showState(); // открыто
-    menu.close();
-    menu.showState(); // закрыто (закрытие без анимации)
-}, 1000);
+
+function FormatError() {
+    
+}
