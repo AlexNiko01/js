@@ -206,6 +206,27 @@ AnimatingMenu.prototype.showState = function () {
 // }, 1000);
 
 
-function FormatError() {
-    
+function FormatError(message) {
+    SyntaxError.apply(this, arguments);
+    this.message = message;
+    this.name = 'FormatError';
+
+    if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, this.constructor);
+    } else {
+        this.stack = (new Error()).stack;
+    }
 }
+
+FormatError.prototype = Object.create(SyntaxError.prototype);
+FormatError.prototype.constructor = FormatError;
+
+FormatError.prototype.stack = Error.prototype.stack;
+
+var err = new FormatError("ошибка форматирования");
+
+console.log(err.message);
+console.log(err.name);
+console.log(err.stack);
+
+
